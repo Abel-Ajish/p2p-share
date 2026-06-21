@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "app/api/signal/[roomId]/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/signal/stream/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}

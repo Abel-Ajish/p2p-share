@@ -1,0 +1,68 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./hooks/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ["var(--font-display)", "sans-serif"],
+        body: ["var(--font-body)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
+      },
+      colors: {
+        primary: "var(--md-primary)",
+        "on-primary": "var(--md-on-primary)",
+        "primary-container": "var(--md-primary-container)",
+        "on-primary-container": "var(--md-on-primary-container)",
+        secondary: "var(--md-secondary)",
+        "on-secondary": "var(--md-on-secondary)",
+        surface: "var(--md-surface)",
+        "surface-dim": "var(--md-surface-dim)",
+        "surface-bright": "var(--md-surface-bright)",
+        "surface-variant": "var(--md-surface-variant)",
+        "surface-container": "var(--md-surface-container)",
+        "surface-container-low": "var(--md-surface-container-low)",
+        "surface-container-high": "var(--md-surface-container-high)",
+        "surface-container-highest": "var(--md-surface-container-highest)",
+        "on-surface": "var(--md-on-surface)",
+        "on-surface-variant": "var(--md-on-surface-variant)",
+        outline: "var(--md-outline)",
+        "outline-variant": "var(--md-outline-variant)",
+        error: "var(--md-error)",
+        "on-error": "var(--md-on-error)",
+        "error-container": "var(--md-error-container)",
+        success: "var(--md-success)",
+      },
+      borderRadius: {
+        "m3-xs": "4px",
+        "m3-sm": "8px",
+        "m3-md": "12px",
+        "m3-lg": "16px",
+        "m3-xl": "28px",
+        "m3-full": "9999px",
+      },
+      boxShadow: {
+        "elevation-0": "none",
+        "elevation-1": "0 1px 2px rgba(0,0,0,0.30), 0 1px 3px 1px rgba(0,0,0,0.15)",
+        "elevation-2": "0 1px 2px rgba(0,0,0,0.30), 0 2px 6px 2px rgba(0,0,0,0.15)",
+        "elevation-3": "0 1px 3px rgba(0,0,0,0.30), 0 4px 8px 3px rgba(0,0,0,0.15)",
+      },
+      keyframes: {
+        "radar-sweep": { "0%": { transform: "rotate(0deg)" }, "100%": { transform: "rotate(360deg)" } },
+        "pulse-ring": { "0%": { transform: "scale(0.8)", opacity: "0.8" }, "100%": { transform: "scale(2.2)", opacity: "0" } },
+        "fade-up": { "0%": { transform: "translateY(8px)", opacity: "0" }, "100%": { transform: "translateY(0)", opacity: "1" } },
+        shimmer: { "0%": { backgroundPosition: "-200% 0" }, "100%": { backgroundPosition: "200% 0" } },
+      },
+      animation: {
+        "radar-sweep": "radar-sweep 3s linear infinite",
+        "pulse-ring": "pulse-ring 1.8s cubic-bezier(0.2, 0.6, 0.4, 1) infinite",
+        "fade-up": "fade-up 0.4s cubic-bezier(0.2, 0, 0, 1) both",
+        shimmer: "shimmer 2s linear infinite",
+      },
+    },
+  },
+  plugins: [],
+};

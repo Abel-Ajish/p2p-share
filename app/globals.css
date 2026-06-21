@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --md-primary: #aac7ff;
+  --md-on-primary: #002e69;
+  --md-primary-container: #00429b;
+  --md-on-primary-container: #d8e2ff;
+  --md-secondary: #bcc6e0;
+  --md-on-secondary: #263250;
+  --md-surface: #111318;
+  --md-surface-dim: #0d0f14;
+  --md-surface-bright: #36383f;
+  --md-surface-variant: #44474f;
+  --md-surface-container: #1d2024;
+  --md-surface-container-low: #191c20;
+  --md-surface-container-high: #272a2f;
+  --md-surface-container-highest: #32353a;
+  --md-on-surface: #e3e2e6;
+  --md-on-surface-variant: #c4c6d0;
+  --md-outline: #8e9099;
+  --md-outline-variant: #44474f;
+  --md-error: #ffb4ab;
+  --md-on-error: #690005;
+  --md-error-container: #93000a;
+  --md-success: #7dd6a8;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--md-outline) transparent;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--md-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
