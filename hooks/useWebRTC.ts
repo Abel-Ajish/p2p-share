@@ -27,6 +27,8 @@ type SendFn = (kind: SignalMessage["kind"], toId: string | undefined, payload?: 
 export function useWebRTC({ roomId, selfId, onChannelReady, onChannelMessage }: UseWebRTCOptions) {
   const peersRef = useRef<Map<string, PeerEntry>>(new Map());
   const { addPeer, removePeer, setPeerStatus } = usePeerStore();
+  const selfIdRef = useRef(selfId);
+  selfIdRef.current = selfId;
 
   const onChannelReadyRef = useRef(onChannelReady);
   onChannelReadyRef.current = onChannelReady;
@@ -86,6 +88,8 @@ export function useWebRTC({ roomId, selfId, onChannelReady, onChannelMessage }: 
 
       if (kind === "join") {
         if (peersRef.current.has(fromId)) return;
+        const amLeader = selfIdRef.current < fromId;
+        if (!amLeader) return;
         const pc = createPeerConnection(fromId, true, send);
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
@@ -101,16 +105,7 @@ export function useWebRTC({ roomId, selfId, onChannelReady, onChannelMessage }: 
       }
 
       if (kind === "offer") {
-        let pc: RTCPeerConnection;
-        const existing = peersRef.current.get(fromId);
-        if (existing) {
-          pc = existing.pc;
-          if (pc.signalingState === "have-local-offer") {
-            await pc.setLocalDescription({ type: "rollback" });
-          }
-        } else {
-          pc = createPeerConnection(fromId, false, send);
-        }
+        const pc = createPeerConnection(fromId, false, send);
         await pc.setRemoteDescription(new RTCSessionDescription(payload as RTCSessionDescriptionInit));
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
