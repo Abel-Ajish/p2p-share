@@ -85,6 +85,13 @@ export function useWebRTC({ roomId, selfId, onChannelReady, onChannelMessage }: 
       const { kind, fromId, payload } = message;
 
       if (kind === "join") {
+        // Close any existing connection to handle race where both peers sent join
+        const existing = peersRef.current.get(fromId);
+        if (existing) {
+          existing.pc.close();
+          peersRef.current.delete(fromId);
+          removePeer(fromId);
+        }
         const pc = createPeerConnection(fromId, true, send);
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
@@ -100,6 +107,13 @@ export function useWebRTC({ roomId, selfId, onChannelReady, onChannelMessage }: 
       }
 
       if (kind === "offer") {
+        // Close any existing connection to handle race where both peers sent join
+        const existing = peersRef.current.get(fromId);
+        if (existing) {
+          existing.pc.close();
+          peersRef.current.delete(fromId);
+          removePeer(fromId);
+        }
         const pc = createPeerConnection(fromId, false, send);
         await pc.setRemoteDescription(new RTCSessionDescription(payload as RTCSessionDescriptionInit));
         const answer = await pc.createAnswer();
