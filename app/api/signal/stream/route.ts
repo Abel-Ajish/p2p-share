@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   const roomId = req.nextUrl.searchParams.get("roomId");
   const selfId = req.nextUrl.searchParams.get("selfId");
   if (!roomId || !selfId) return new Response("roomId and selfId are required", { status: 400 });
-  let cursor = Date.now();
+  let cursor = Date.now() - 5000;
   const startedAt = Date.now();
   const stream = new ReadableStream({
     async start(controller) {

@@ -85,13 +85,7 @@ export function useWebRTC({ roomId, selfId, onChannelReady, onChannelMessage }: 
       const { kind, fromId, payload } = message;
 
       if (kind === "join") {
-        // Close any existing connection to handle race where both peers sent join
-        const existing = peersRef.current.get(fromId);
-        if (existing) {
-          existing.pc.close();
-          peersRef.current.delete(fromId);
-          removePeer(fromId);
-        }
+        if (peersRef.current.has(fromId)) return;
         const pc = createPeerConnection(fromId, true, send);
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
@@ -107,14 +101,16 @@ export function useWebRTC({ roomId, selfId, onChannelReady, onChannelMessage }: 
       }
 
       if (kind === "offer") {
-        // Close any existing connection to handle race where both peers sent join
+        let pc: RTCPeerConnection;
         const existing = peersRef.current.get(fromId);
         if (existing) {
-          existing.pc.close();
-          peersRef.current.delete(fromId);
-          removePeer(fromId);
+          pc = existing.pc;
+          if (pc.signalingState === "have-local-offer") {
+            await pc.setLocalDescription({ type: "rollback" });
+          }
+        } else {
+          pc = createPeerConnection(fromId, false, send);
         }
-        const pc = createPeerConnection(fromId, false, send);
         await pc.setRemoteDescription(new RTCSessionDescription(payload as RTCSessionDescriptionInit));
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
@@ -136,7 +132,7 @@ export function useWebRTC({ roomId, selfId, onChannelReady, onChannelMessage }: 
           try {
             await entry.pc.addIceCandidate(new RTCIceCandidate(payload as RTCIceCandidateInit));
           } catch {
-            // Benign if it arrives before remote description is set; ICE retries.
+            // Benign if it arrives before remote description is set
           }
         }
         return;
